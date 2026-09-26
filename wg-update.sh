@@ -22,7 +22,7 @@ fi
 # --- update ---
 # bring the tunnel down if one exists (skipped when wg0 isn't configured
 # or wireguard-tools isn't installed yet)
-[ -f "$WG_CONF" ] && wg-quick down "$WG_IFACE" 2>/dev/null || true
+[ -f "$WG_CONF" ] && sudo wg-quick down "$WG_IFACE" 2>/dev/null || true
 
 rm -rf /tmp/wireguard-tools-build
 
@@ -30,12 +30,12 @@ rm -rf /tmp/wireguard-tools-build
 # git prints when --branch points at a tag (which is intentional here)
 git -c advice.detachedHead=false clone --depth 1 --branch "v$latest" "$REPO" /tmp/wireguard-tools-build
 make -C /tmp/wireguard-tools-build/src
-make -C /tmp/wireguard-tools-build/src install
+sudo make -C /tmp/wireguard-tools-build/src install
 
 rm -rf /tmp/wireguard-tools-build
 
 # start and autostart wg (only when a tunnel config exists)
 if [ -f "$WG_CONF" ]; then
-    wg-quick up "$WG_IFACE"
-    systemctl enable "wg-quick@$WG_IFACE"
+    sudo wg-quick up "$WG_IFACE"
+    sudo systemctl enable "wg-quick@$WG_IFACE"
 fi

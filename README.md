@@ -10,20 +10,22 @@ Keeps the [wireguard-tools](https://git.zx2c4.com/wireguard-tools) userspace too
 ## Usage
 
 ```bash
-sudo ./wg-update.sh
+./wg-update.sh
 ```
+
+The scripts run unprivileged and prefix only the root-requiring commands (`wg-quick up/down`, `make install`, `systemctl enable`) with `sudo`. Running the whole script via `sudo` works too.
 
 To test the update path end to end:
 
 ```bash
-sudo ./wg-downgrade.sh   # downgrade to second-newest
-sudo ./wg-update.sh      # upgrades back to newest
-sudo ./wg-update.sh      # second run: "up to date, nothing to do"
+./wg-downgrade.sh   # downgrade to second-newest
+./wg-update.sh      # upgrades back to newest
+./wg-update.sh      # second run: "up to date, nothing to do"
 ```
 
 ## Requirements
 
-- root (build, install, and tunnel control)
+- sudo privileges for the commands listed above
 - `git`, `make`, a C compiler
 
 No existing wireguard-tools installation or tunnel is required — the scripts work on a bare system. If `/etc/wireguard/wg0.conf` exists, the tunnel is brought down before installing and back up (with autostart enabled) afterwards; otherwise tunnel management is skipped entirely.
